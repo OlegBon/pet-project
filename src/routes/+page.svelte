@@ -2,7 +2,6 @@
     export let data;
 </script>
 
-
 <div class="overflow-x-auto">
     <table class="table">
       <!-- head -->
@@ -50,7 +49,7 @@
             </td>
             <td><strong>{product.price} $</strong></td>
             <th>
-              <button class="btn btn-ghost btn-xs">details</button>
+              <button class="btn btn-info">Buy</button>
             </th>
           </tr>
          {/each}
