@@ -1,5 +1,11 @@
 <script>
     import "../app.css";
+
+    let searchText = '';
+
+    fetch('https://dummyjson.com/products/search?q=powder')
+      .then(res => res.json())
+      .then(console.log);
   </script>
   
   <div class="navbar bg-base-300">
