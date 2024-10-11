@@ -1,33 +1,11 @@
 <script>
     import "../app.css";
-
-    let searchText = '';
-
-    fetch('https://dummyjson.com/products/search?q=powder')
-      .then(res => res.json())
-      .then(console.log);
   </script>
   
   <div class="navbar bg-base-300">
     <div class="flex-1">
       <a class="btn btn-ghost text-xl" href="/">daisyUI</a>
     </div>
-
-    <div class="join flex-auto">
-      <div>
-        <div>
-          <input class="input input-bordered join-item" placeholder="Search" />
-        </div>
-      </div>
-      <select class="select select-bordered join-item">
-        <option disabled selected>Filter</option>
-        <option>Sci-fi</option>
-        <option>Drama</option>
-        <option>Action</option>
-      </select>
-      <button class="btn join-item">Search</button>
-    </div>
-
     <div class="flex-none">
       <div class="dropdown dropdown-end">
         <div tabindex="0" role="button" class="btn btn-ghost btn-circle">

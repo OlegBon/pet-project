@@ -1,6 +1,47 @@
 <script>
 	export let data;
+
+	let searchValue = '';
+
+	function fetchProducts(url) {
+		fetch(url)
+			.then((res) => res.json())
+			.then((enterData) => {
+				data.products = enterData.products;
+			});
+	}
+
+	$: if (searchValue === '') {
+		fetchProducts('https://dummyjson.com/products');
+	}
+   
+   function searchFunction() {
+		if (searchValue) {
+			fetchProducts(`https://dummyjson.com/products/search?q=${searchValue}`)
+		}
+	}
+
+	function keypressEnter(value) {
+		if (value.key === 'Enter') {
+			searchFunction();
+		}
+	}
 </script>
+
+<div class="join flex justify-center">
+	<div>
+	  <div>
+		<input class="input input-bordered join-item" placeholder="Search" bind:value={searchValue} on:keypress={keypressEnter} />
+	  </div>
+	</div>
+	<select class="select select-bordered join-item">
+	  <option disabled selected>Filter</option>
+	  <option>Sci-fi</option>
+	  <option>Drama</option>
+	  <option>Action</option>
+	</select>
+	<button class="btn join-item" on:click={searchFunction}>Search</button>
+</div>
 
 <div class="overflow-x-auto">
 	<table class="table">
