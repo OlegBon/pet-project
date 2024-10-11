@@ -1,7 +1,5 @@
-import { dev } from '$app/environment';
+// import { dev } from '$app/environment';
 import adapter from '@sveltejs/adapter-static';
-
-// const dev = process.argv.includes('dev');
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -12,11 +10,6 @@ const config = {
 		adapter: adapter({
 			fallback: 'index.html' // may differ from host to host
 		}),
-
-		// paths: {
-		// 	base: process.env.NODE_ENV === 'production'?' /olegbon.github.io/pet-project-build/': '',
-		// }
-
 		paths: {
 			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH,
 		}
