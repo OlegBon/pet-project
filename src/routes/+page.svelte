@@ -2,6 +2,8 @@
 	export let data;
 
 	let searchValue = '';
+	let categorysList = [];
+	let selectedCategoryName;
 
 	function fetchProducts(url) {
 		fetch(url)
@@ -18,6 +20,8 @@
    function searchFunction() {
 		if (searchValue) {
 			fetchProducts(`https://dummyjson.com/products/search?q=${searchValue}`)
+		} else {
+			getProductsByCategory(selectedCategoryName);
 		}
 	}
 
@@ -25,6 +29,32 @@
 		if (value.key === 'Enter') {
 			searchFunction();
 		}
+	}
+
+	// Get product category List
+	(function getProductCategoryList() {
+		fetch('https://dummyjson.com/products/category-list')
+		.then(res => res.json())
+		// .then(categories) => {
+		// 	categorysList = categories;
+		// };
+		.then(function (categories) {
+			categorysList = categories;
+		});
+	})();
+
+	function getProductsByCategory(categoryName) {
+		fetch(`https://dummyjson.com/products/category/${categoryName}`)
+			.then(res => res.json())
+			.then((enterData) => {
+				data.products = enterData.products;
+			});
+	}
+
+	function clearAllFilters() {
+		searchFunction = '';
+		selectedCategoryName = 'Category';
+		fetchProducts('https://dummyjson.com/products');
 	}
 </script>
 
@@ -34,13 +64,14 @@
 		<input class="input input-bordered join-item" placeholder="Search" bind:value={searchValue} on:keypress={keypressEnter} />
 	  </div>
 	</div>
-	<select class="select select-bordered join-item">
-	  <option disabled selected>Filter</option>
-	  <option>Sci-fi</option>
-	  <option>Drama</option>
-	  <option>Action</option>
+	<select class="select select-bordered join-item" bind:value={selectedCategoryName}>
+	  <option disabled selected>Category</option>
+	  {#each categorysList as categoryName}
+	  	<option value={categoryName}>{categoryName}</option>
+	  {/each}
 	</select>
 	<button class="btn join-item" on:click={searchFunction}>Search</button>
+	<button class="btn btn-info join-item" on:click={clearAllFilters}>Clear filter</button>
 </div>
 
 <div class="overflow-x-auto">
