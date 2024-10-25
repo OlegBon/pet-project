@@ -4,12 +4,21 @@
 	let searchValue = '';
 	let categorysList = [];
 	let selectedCategoryName;
+	const categoryFilterNAme = 'Category';
+	let loading = false;
+	let isOpenModal = false;
 
 	function fetchProducts(url) {
+		loading = true;
 		fetch(url)
 			.then((res) => res.json())
 			.then((enterData) => {
-				data.products = enterData.products;
+				if (!enterData.products.length) {
+					isOpenModal = true;
+				} else {
+					data.products = enterData.products;
+				}
+				loading = false;
 			});
 	}
 
@@ -20,7 +29,7 @@
    function searchFunction() {
 		if (searchValue) {
 			fetchProducts(`https://dummyjson.com/products/search?q=${searchValue}`)
-		} else {
+		} else if (selectedCategoryName !== categoryFilterNAme) {
 			getProductsByCategory(selectedCategoryName);
 		}
 	}
@@ -35,25 +44,24 @@
 	(function getProductCategoryList() {
 		fetch('https://dummyjson.com/products/category-list')
 		.then(res => res.json())
-		// .then(categories) => {
-		// 	categorysList = categories;
-		// };
 		.then(function (categories) {
 			categorysList = categories;
 		});
 	})();
 
 	function getProductsByCategory(categoryName) {
+		loading = true;
 		fetch(`https://dummyjson.com/products/category/${categoryName}`)
 			.then(res => res.json())
 			.then((enterData) => {
 				data.products = enterData.products;
+				loading = false;
 			});
 	}
 
 	function clearAllFilters() {
-		searchFunction = '';
-		selectedCategoryName = 'Category';
+		searchValue = '';
+		selectedCategoryName = categoryFilterNAme;
 		fetchProducts('https://dummyjson.com/products');
 	}
 </script>
@@ -65,14 +73,30 @@
 	  </div>
 	</div>
 	<select class="select select-bordered join-item" bind:value={selectedCategoryName}>
-	  <option disabled selected>Category</option>
+	  <option disabled selected>{categoryFilterNAme}</option>
 	  {#each categorysList as categoryName}
 	  	<option value={categoryName}>{categoryName}</option>
 	  {/each}
 	</select>
-	<button class="btn join-item" on:click={searchFunction}>Search</button>
+	<button class="btn join-item" disabled={loading} on:click={searchFunction}>
+		{#if loading}
+			<span class="loading loading-spinner text-info"></span>
+		{/if}
+		Search</button>
 	<button class="btn btn-info join-item" on:click={clearAllFilters}>Clear filter</button>
 </div>
+
+<dialog class="modal" open={isOpenModal}>
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Warning!</h3>
+    <p class="py-4">По запиту "{searchValue}" нічого не знайдено</p>
+    <div class="modal-action">
+      <form method="dialog">
+        <button class="btn" on:click={ (isOpenModal = false) }>Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
 
 <div class="overflow-x-auto">
 	<table class="table">
