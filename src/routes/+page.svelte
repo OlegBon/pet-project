@@ -83,7 +83,10 @@
 			<span class="loading loading-spinner text-info"></span>
 		{/if}
 		Search</button>
+	{#if searchValue || selectedCategoryName !== categoryFilterNAme}
 	<button class="btn btn-info join-item" on:click={clearAllFilters}>Clear filter</button>
+	{/if}
+	
 </div>
 
 <dialog class="modal" open={isOpenModal}>
@@ -92,7 +95,7 @@
     <p class="py-4">По запиту "{searchValue}" нічого не знайдено</p>
     <div class="modal-action">
       <form method="dialog">
-        <button class="btn" on:click={ (isOpenModal = false) }>Close</button>
+        <button class="btn" on:click={ () => (isOpenModal = false) }>Close</button>
       </form>
     </div>
   </div>
